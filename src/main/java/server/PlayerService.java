@@ -3,9 +3,6 @@ package server;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import model.Player;
-import model.PlayerResponse;
-import model.PlayerResponseList;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
