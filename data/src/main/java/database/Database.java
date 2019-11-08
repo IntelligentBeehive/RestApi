@@ -5,18 +5,23 @@ import java.util.ArrayList;
 
 public class Database {
 
-    private static String host = "studmysql01.fhict.local";
-    private static String user = "dbi391176";
+    private static String host = "rdbms.strato.de";
+    private static String dbName = "DB3496989";
+    private static String user = "U3496989";
     private static String pass = "appelsenperen12";
+
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(
+                "jdbc:mysql://" + host + ":3306/"+dbName,
+                user, pass);   // For MySQL only
+    }
 
     public ArrayList<SensorDTO> getAllSensors() {
 
         ArrayList<SensorDTO> Sensors = new ArrayList<>();
 
         try (
-                Connection conn = DriverManager.getConnection(
-                        "jdbc:mysql://" + host + ":3306/dbi391176",
-                        user, pass);   // For MySQL only
+                Connection conn = this.getConnection();
                 Statement stmt = conn.createStatement();
         ) {
             String strSelect = "select * from Sensor";
@@ -52,9 +57,7 @@ public class Database {
         SensorDTO Sensor = null;
 
         try (
-                Connection conn = DriverManager.getConnection(
-                        "jdbc:mysql://" + host + ":3306/dbi391176",
-                        user, pass);   // For MySQL only
+                Connection conn = this.getConnection();
                 Statement stmt = conn.createStatement();
         ) {
             String strSelect = String.format("select * from Sensor WHERE id = %d;", id);
@@ -87,9 +90,7 @@ public class Database {
     public void insertSensor(SensorDTO Sensor) {
 
         try (
-                Connection conn = DriverManager.getConnection(
-                        "jdbc:mysql://" + host + ":3306/dbi391176",
-                        user, pass);   // For MySQL only
+                Connection conn = this.getConnection();
                 Statement stmt = conn.createStatement();
         ) {
             stmt.executeUpdate(String.format("INSERT INTO Sensor (name) VALUES ('%s')", Sensor.getName()));
@@ -104,9 +105,7 @@ public class Database {
     public void addScore(int SensorId, int score) {
 
         try (
-                Connection conn = DriverManager.getConnection(
-                        "jdbc:mysql://" + host + ":3306/dbi391176",
-                        user, pass);   // For MySQL only
+                Connection conn = this.getConnection();
                 Statement stmt = conn.createStatement();
         ) {
             stmt.executeUpdate(String.format(" UPDATE Sensor    SET score = score + %d, games_played = games_played + 1    WHERE id = %d", score, SensorId));
@@ -121,9 +120,7 @@ public class Database {
     public SensorDTO checkPassword(String name, String password) {
         SensorDTO Sensor = null;
         try (
-                Connection conn = DriverManager.getConnection(
-                        "jdbc:mysql://" + host + ":3306/dbi391176",
-                        user, pass);   // For MySQL only
+                Connection conn = this.getConnection();
                 Statement stmt = conn.createStatement();
         ) {
             String strSelect = String.format("select * from Sensor WHERE name = %s AND password=%s;", name, password);
