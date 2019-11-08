@@ -1,13 +1,10 @@
-package service;
+package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class SensorResponseList {
+public class SensorResponse {
     private String operation = "";
     private String expression = "";
     private String result = "";
-    private List<Sensor> SensorList = new ArrayList<>();
+    private Sensor Sensor;
 
     public String getOperation() {
         return operation;
@@ -33,15 +30,11 @@ public class SensorResponseList {
         return result;
     }
 
-    public List<Sensor> getSensorList() {
-        return SensorList;
+    public Sensor getSensor() {
+        return Sensor;
     }
 
-    public void setSensorList(List<Sensor> SensorList) {
-        this.SensorList = SensorList;
-    }
-
-    public void addToResponseList(Sensor Sensor) {
-        this.SensorList.add(Sensor);
+    public void setSensor(Sensor Sensor) {
+        this.Sensor = Sensor;
     }
 }

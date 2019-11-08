@@ -3,9 +3,11 @@ package service;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import model.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.FileReader;
@@ -24,7 +26,7 @@ public class SensorService {
 
     private void saveToFile(Map<Integer, Sensor> SensorMap) {
         try (FileWriter file = new FileWriter(
-        "/Users/dtril/Documents/JavaProjects/beerestapi/src/main/resources/test.json"
+                "/Users/dtril/Documents/JavaProjects/battleship/seabattleserver/src/main/resources/test.json"
         )) {
             file.write(gson.toJson(SensorMap));
         } catch (IOException e) {
@@ -36,7 +38,7 @@ public class SensorService {
 
         try {
             var file = new FileReader(
-            "/Users/dtril/Documents/JavaProjects/beerestapi/src/main/resources/test.json"
+                    "/Users/dtril/Documents/JavaProjects/battleship/seabattleserver/src/main/resources/test.json"
             );
 
             JsonReader result = new JsonReader(file);
@@ -71,6 +73,8 @@ public class SensorService {
                     p.setUrl(url);
                     response.addToResponseList(p);
                 }
+
+                response.setResult("success");
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -113,18 +117,33 @@ public class SensorService {
         return Response.status(200).entity(output).build();
     }
 
-    @POST
-    public Response addNewSensor(
-            @QueryParam("name") String name,
-            @QueryParam("password") String password
-    ) {
-        var SensorMap = getSensorMapFromFile();
 
-        if (name.isEmpty() || password.isEmpty()) {
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addNewSensor(
+            String SensorInput
+    ) {
+        System.out.println(SensorInput);
+
+        Type type = new TypeToken<SensorRequest>() {}.getType();
+        SensorRequest request = gson.fromJson(SensorInput, type);
+
+        var SensorMap = getSensorMapFromFile();
+        var username = request.getUsername();
+        var password = request.getPassword();
+
+        if (username != null && password != null) {
+            if (username.isEmpty() || password.isEmpty()) {
+                return Response.status(400).build();
+            }
+        }
+        else {
             return Response.status(400).build();
         }
 
-        var Sensor = new Sensor(id, name, password);
+        var Sensor = new Sensor(id, SensorType.CO2, username, password);
 
         SensorMap.put(id, Sensor);
         id++;

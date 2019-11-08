@@ -11,6 +11,7 @@
     <modules>
         <module>api</module>
         <module>data</module>
+        <module>shared</module>
     </modules>
 
     <properties>
