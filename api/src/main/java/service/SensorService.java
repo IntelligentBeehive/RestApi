@@ -18,7 +18,7 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Path("/Sensor")
+@Path("/Sensors")
 public class SensorService {
 
     private Gson gson = new Gson();
