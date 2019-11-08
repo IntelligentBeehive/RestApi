@@ -1,13 +1,13 @@
-package server;
+package service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerResponseList {
+public class SensorResponseList {
     private String operation = "";
     private String expression = "";
     private String result = "";
-    private List<Player> playerList = new ArrayList<>();
+    private List<Sensor> SensorList = new ArrayList<>();
 
     public String getOperation() {
         return operation;
@@ -33,15 +33,15 @@ public class PlayerResponseList {
         return result;
     }
 
-    public List<Player> getPlayerList() {
-        return playerList;
+    public List<Sensor> getSensorList() {
+        return SensorList;
     }
 
-    public void setPlayerList(List<Player> playerList) {
-        this.playerList = playerList;
+    public void setSensorList(List<Sensor> SensorList) {
+        this.SensorList = SensorList;
     }
 
-    public void addToResponseList(Player player) {
-        this.playerList.add(player);
+    public void addToResponseList(Sensor Sensor) {
+        this.SensorList.add(Sensor);
     }
 }

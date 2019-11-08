@@ -1,4 +1,4 @@
-package server;
+package service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -16,35 +16,35 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Path("/player")
-public class PlayerService {
+@Path("/Sensor")
+public class SensorService {
 
     private Gson gson = new Gson();
     private static int id = 0;
 
-    private void saveToFile(Map<Integer, Player> playerMap) {
+    private void saveToFile(Map<Integer, Sensor> SensorMap) {
         try (FileWriter file = new FileWriter(
-        "/Users/dtril/Documents/JavaProjects/battleship/seabattleserver/src/main/resources/test.json"
+        "/Users/dtril/Documents/JavaProjects/beerestapi/src/main/resources/test.json"
         )) {
-            file.write(gson.toJson(playerMap));
+            file.write(gson.toJson(SensorMap));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private Map<Integer, Player> getPlayerMapFromFile() {
+    private Map<Integer, Sensor> getSensorMapFromFile() {
 
         try {
             var file = new FileReader(
-            "/Users/dtril/Documents/JavaProjects/battleship/seabattleserver/src/main/resources/test.json"
+            "/Users/dtril/Documents/JavaProjects/beerestapi/src/main/resources/test.json"
             );
 
             JsonReader result = new JsonReader(file);
-            Type type = new TypeToken<Map<Integer, Player>>(){}.getType();
-            Map<Integer, Player> playerMap = gson.fromJson(result, type);
+            Type type = new TypeToken<Map<Integer, Sensor>>(){}.getType();
+            Map<Integer, Sensor> SensorMap = gson.fromJson(result, type);
 
-            if(playerMap != null) {
-                return playerMap;
+            if(SensorMap != null) {
+                return SensorMap;
             }
 
         } catch (Exception e) {
@@ -57,17 +57,17 @@ public class PlayerService {
 
 
     @GET
-    public Response getAllPlayers(@Context UriInfo uriInfo) {
-        var playerMap = getPlayerMapFromFile();
+    public Response getAllSensors(@Context UriInfo uriInfo) {
+        var SensorMap = getSensorMapFromFile();
 
-        PlayerResponseList response = new PlayerResponseList();
-        response.setOperation("GetAllPlayers");
+        SensorResponseList response = new SensorResponseList();
+        response.setOperation("GetAllSensors");
         response.setExpression("/");
         try {
             try {
                 var url = uriInfo.getBaseUri().toURL().toString();
 
-                for(Player p: playerMap.values()) {
+                for(Sensor p: SensorMap.values()) {
                     p.setUrl(url);
                     response.addToResponseList(p);
                 }
@@ -87,22 +87,22 @@ public class PlayerService {
 
     @GET
     @Path("/{id}")
-    public Response getPlayer(@PathParam("id") String id) {
-        var playerMap = getPlayerMapFromFile();
+    public Response getSensor(@PathParam("id") String id) {
+        var SensorMap = getSensorMapFromFile();
 
-        PlayerResponse response = new PlayerResponse();
-        response.setOperation("GetPlayer");
+        SensorResponse response = new SensorResponse();
+        response.setOperation("GetSensor");
         response.setExpression(id);
 
         try {
             int value = Integer.parseInt(id);
-            if(!playerMap.containsKey(value)){
-                response.setResult("Player not found");
+            if(!SensorMap.containsKey(value)){
+                response.setResult("Sensor not found");
             }
             else {
-                var player = playerMap.get(value);
-                response.setResult("Player found");
-                response.setPlayer(player);
+                var Sensor = SensorMap.get(value);
+                response.setResult("Sensor found");
+                response.setSensor(Sensor);
             }
 
         } catch (NumberFormatException nfe) {
@@ -114,45 +114,45 @@ public class PlayerService {
     }
 
     @POST
-    public Response addNewPlayer(
+    public Response addNewSensor(
             @QueryParam("name") String name,
             @QueryParam("password") String password
     ) {
-        var playerMap = getPlayerMapFromFile();
+        var SensorMap = getSensorMapFromFile();
 
         if (name.isEmpty() || password.isEmpty()) {
             return Response.status(400).build();
         }
 
-        var player = new Player(id, name, password);
+        var Sensor = new Sensor(id, name, password);
 
-        playerMap.put(id, player);
+        SensorMap.put(id, Sensor);
         id++;
 
-        saveToFile(playerMap);
+        saveToFile(SensorMap);
 
-        String output = gson.toJson(player);
+        String output = gson.toJson(Sensor);
         return Response.status(200).entity(output).build();
     }
 
     @DELETE
     @Path("/{id}")
-    public Response deletePlayer(@PathParam("id") String id) {
-        var playerMap = getPlayerMapFromFile();
+    public Response deleteSensor(@PathParam("id") String id) {
+        var SensorMap = getSensorMapFromFile();
 
         boolean okayResult = true;
-        PlayerResponse response = new PlayerResponse();
-        response.setOperation("DeletePlayer");
+        SensorResponse response = new SensorResponse();
+        response.setOperation("DeleteSensor");
         response.setExpression(id);
         try {
             int value = Integer.parseInt(id);
-            if(!playerMap.containsKey(value)){
+            if(!SensorMap.containsKey(value)){
                 okayResult = false;
-                response.setResult("Player not found");
+                response.setResult("Sensor not found");
             }
             else {
-                playerMap.remove(value);
-                response.setResult("Player Deleted");
+                SensorMap.remove(value);
+                response.setResult("Sensor Deleted");
             }
 
 
@@ -160,7 +160,7 @@ public class PlayerService {
             response.setResult("invalid value");
         }
 
-        saveToFile(playerMap);
+        saveToFile(SensorMap);
 
         String output = gson.toJson(response);
         if(okayResult) {

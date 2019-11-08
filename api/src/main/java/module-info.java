@@ -1,11 +1,11 @@
-module beerestapi {
+module api {
     requires java.sql;
     requires gson;
     requires javax.ws.rs.api;
-    requires jetty.servlet;
-    requires jetty.server;
     requires jersey.container.servlet.core;
     requires javax.servlet.api;
+    requires org.eclipse.jetty.servlet;
+    requires org.eclipse.jetty.server;
 
-    exports server;
+    exports service;
 }

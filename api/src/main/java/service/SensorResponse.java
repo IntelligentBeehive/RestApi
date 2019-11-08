@@ -1,10 +1,10 @@
-package server;
+package service;
 
-public class PlayerResponse {
+public class SensorResponse {
     private String operation = "";
     private String expression = "";
     private String result = "";
-    private Player player;
+    private Sensor Sensor;
 
     public String getOperation() {
         return operation;
@@ -30,11 +30,11 @@ public class PlayerResponse {
         return result;
     }
 
-    public Player getPlayer() {
-        return player;
+    public Sensor getSensor() {
+        return Sensor;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setSensor(Sensor Sensor) {
+        this.Sensor = Sensor;
     }
 }

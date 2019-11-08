@@ -1,4 +1,4 @@
-package server;
+package service;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -17,7 +17,7 @@ public class Service {
 
         // Tells the Jersey Servlet which REST service/class to load.
         jerseyServlet.setInitParameter("jersey.config.server.provider.classnames",
-                PlayerService.class.getCanonicalName());
+                SensorService.class.getCanonicalName());
 
         try {
             jettyServer.start();
