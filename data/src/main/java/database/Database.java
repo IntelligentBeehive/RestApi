@@ -8,7 +8,7 @@ public class Database {
     private static String host = "rdbms.strato.de";
     private static String dbName = "DB3496989";
     private static String user = "U3496989";
-    private static String pass = "appelsenperen12";
+    private static String pass = "Bijenkast112";
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
