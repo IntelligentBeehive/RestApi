@@ -129,49 +129,13 @@ public class SensorService {
         SensorRequest request = gson.fromJson(SensorInput, type);
 
         var value = request.getValue();
+        var sensor = new Sensor(SensorType.CO2, value);
 
-//        if(value)
-//        return Response.status(400).build();
-
-        var sensor = new Sensor(id, SensorType.CO2, value);
-
-        database.insertSensor(sensor);
+        if(database.insertSensor(sensor) == 0) {
+            return Response.status(400).build();
+        }
 
         String output = gson.toJson(sensor);
         return Response.status(200).entity(output).build();
-    }
-
-    @DELETE
-    @Path("/{id}")
-    public Response deleteSensor(@PathParam("id") String id) {
-        var SensorMap = getSensorMapFromFile();
-
-        boolean okayResult = true;
-        SensorResponse response = new SensorResponse();
-        response.setOperation("DeleteSensor");
-        response.setExpression(id);
-        try {
-            int value = Integer.parseInt(id);
-            if(!SensorMap.containsKey(value)){
-                okayResult = false;
-                response.setResult("Sensor not found");
-            }
-            else {
-                SensorMap.remove(value);
-                response.setResult("Sensor Deleted");
-            }
-
-
-        } catch (NumberFormatException nfe) {
-            response.setResult("invalid value");
-        }
-
-        saveToFile(SensorMap);
-
-        String output = gson.toJson(response);
-        if(okayResult) {
-            return Response.status(200).entity(output).build();
-        }
-        return Response.status(400).entity(output).build();
     }
 }

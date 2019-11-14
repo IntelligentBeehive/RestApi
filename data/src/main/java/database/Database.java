@@ -127,7 +127,7 @@ public class Database {
         return Sensor;
     }
 
-    public void insertSensor(Sensor sensor) {
+    public int insertSensor(Sensor sensor) {
 
         var type = sensor.getType().getTypeString();
         var value = sensor.getValue();
@@ -139,9 +139,12 @@ public class Database {
             stmt.executeUpdate("INSERT INTO "+type+" (value) VALUES ('"+value+"')");
             System.out.println("Affected rows: " + stmt.getUpdateCount());
 
+            return stmt.getUpdateCount();
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
+        return 0;
     }
 }

@@ -9,6 +9,11 @@ public class Sensor {
 
     public Sensor() { } // Default to allow JSON Type convert
 
+    public Sensor(SensorType type, float value) {
+        this.type = type;
+        this.value = value;
+    }
+
     public Sensor(int id, SensorType type, float value) {
         this.id = id;
         this.type = type;
