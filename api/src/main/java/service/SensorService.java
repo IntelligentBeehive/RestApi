@@ -2,7 +2,7 @@ package service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
+import database.Database;
 import model.*;
 
 import javax.ws.rs.*;
@@ -10,57 +10,21 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Path("/sensors")
 public class SensorService {
 
     private Gson gson = new Gson();
+    private Database database = new Database();
     private static int id = 0;
 
-    private void saveToFile(Map<Integer, Sensor> SensorMap) {
-        try (FileWriter file = new FileWriter(
-                "/Users/dtril/Documents/JavaProjects/battleship/seabattleserver/src/main/resources/test.json"
-        )) {
-            file.write(gson.toJson(SensorMap));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    // TODO: Basic Auth
 
-    private Map<Integer, Sensor> getSensorMapFromFile() {
-
-        try {
-            var file = new FileReader(
-                    "/Users/dtril/Documents/JavaProjects/battleship/seabattleserver/src/main/resources/test.json"
-            );
-
-            JsonReader result = new JsonReader(file);
-            Type type = new TypeToken<Map<Integer, Sensor>>(){}.getType();
-            Map<Integer, Sensor> SensorMap = gson.fromJson(result, type);
-
-            if(SensorMap != null) {
-                return SensorMap;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return new HashMap<>();
-    }
-
-
-
-    @GET
-    public Response getAllSensors(@Context UriInfo uriInfo) {
-        var SensorMap = getSensorMapFromFile();
+/*    @GET
+    public Response getAll(@Context UriInfo uriInfo) {
+        var sensorMap = database.getAllSensors();
 
         SensorResponseList response = new SensorResponseList();
         response.setOperation("GetAllSensors");
@@ -69,7 +33,42 @@ public class SensorService {
             try {
                 var url = uriInfo.getBaseUri().toURL().toString();
 
-                for(Sensor p: SensorMap.values()) {
+                for(Sensor p: sensorMap.values()) {
+                    p.setUrl(url);
+                    response.addToResponseList(p);
+                }
+
+                response.setResult("success");
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+        } catch (NumberFormatException nfe) {
+            response.setResult("invalid value");
+        }
+
+        String output = gson.toJson(response);
+        return Response.status(200).entity(output).build();
+    }*/
+
+    @GET
+    @Path("/{type}")
+    public Response getAllByType(
+            @Context UriInfo uriInfo,
+            @PathParam("type") String type
+    ) {
+        var sensorType = SensorType.valueOf(type);
+        var sensorMap = database.getAllByType(sensorType);
+
+        SensorResponseList response = new SensorResponseList();
+        response.setOperation("getAllByType");
+        response.setExpression("/"+type);
+        try {
+            try {
+                var url = uriInfo.getBaseUri().toURL().toString();
+
+                for(Sensor p: sensorMap.values()) {
                     p.setUrl(url);
                     response.addToResponseList(p);
                 }
@@ -90,23 +89,24 @@ public class SensorService {
 
 
     @GET
-    @Path("/{id}")
-    public Response getSensor(@PathParam("id") String id) {
-        var SensorMap = getSensorMapFromFile();
+    @Path("/{type}/{id}")
+    public Response getSensor(@PathParam("type") String type, @PathParam("id") String id) {
 
         SensorResponse response = new SensorResponse();
         response.setOperation("GetSensor");
-        response.setExpression(id);
+        response.setExpression("/"+type+"/"+id);
 
         try {
-            int value = Integer.parseInt(id);
-            if(!SensorMap.containsKey(value)){
+            var sensorType = SensorType.valueOf(type);
+            var sensorId = Integer.parseInt(id);
+            var sensor = database.getSensorById(sensorType, sensorId);
+
+            if( sensor == null) {
                 response.setResult("Sensor not found");
             }
             else {
-                var Sensor = SensorMap.get(value);
                 response.setResult("Sensor found");
-                response.setSensor(Sensor);
+                response.setSensor(sensor);
             }
 
         } catch (NumberFormatException nfe) {
@@ -116,8 +116,6 @@ public class SensorService {
         String output = gson.toJson(response);
         return Response.status(200).entity(output).build();
     }
-
-
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -130,27 +128,16 @@ public class SensorService {
         Type type = new TypeToken<SensorRequest>() {}.getType();
         SensorRequest request = gson.fromJson(SensorInput, type);
 
-        var SensorMap = getSensorMapFromFile();
-        var username = request.getUsername();
-        var password = request.getPassword();
+        var value = request.getValue();
 
-        if (username != null && password != null) {
-            if (username.isEmpty() || password.isEmpty()) {
-                return Response.status(400).build();
-            }
-        }
-        else {
-            return Response.status(400).build();
-        }
+//        if(value)
+//        return Response.status(400).build();
 
-        var Sensor = new Sensor(id, SensorType.CO2, username, password);
+        var sensor = new Sensor(id, SensorType.CO2, value);
 
-        SensorMap.put(id, Sensor);
-        id++;
+        database.insertSensor(sensor);
 
-        saveToFile(SensorMap);
-
-        String output = gson.toJson(Sensor);
+        String output = gson.toJson(sensor);
         return Response.status(200).entity(output).build();
     }
 

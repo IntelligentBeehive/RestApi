@@ -1,9 +1,19 @@
 package model;
 
 public enum SensorType {
-    TEMP,
-    HUMID,
-    CO2,
-    NO2,
-    WEIGHT
+    TEMP("temp"),
+    HUMIDITY("humidity"),
+    CO2("CO2"),
+    NO2("NO2"),
+    WEIGHT("weight");
+
+    private String type;
+
+    SensorType(String type) {
+        this.type = type;
+    }
+
+    public String getTypeString() {
+        return type;
+    }
 }

@@ -3,16 +3,16 @@ package model;
 public class Sensor {
     private int id;
     private SensorType type;
-    private String value;
+
+    private float value;
     private String url;
 
     public Sensor() { } // Default to allow JSON Type convert
 
-    public Sensor(int id, SensorType type, String value, String baseUrl) {
+    public Sensor(int id, SensorType type, float value) {
         this.id = id;
         this.type = type;
         this.value = value;
-        this.setUrl(baseUrl);
     }
 
     public void setUrl(String baseUrl){
@@ -21,6 +21,18 @@ public class Sensor {
 
     public int getId() {
         return id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public float getValue() {
+        return value;
+    }
+
+    public SensorType getType() {
+        return type;
     }
 
     @Override

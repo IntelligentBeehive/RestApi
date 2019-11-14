@@ -1,21 +1,15 @@
 package model;
 
 public class SensorRequest {
-    private String username;
-    private String password;
+    private float value;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
+    public float getValue() {
+        return this.value;
     }
 
     public SensorRequest() {}
 
-    public SensorRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public SensorRequest(float value) {
+        this.value = value;
     }
 }
