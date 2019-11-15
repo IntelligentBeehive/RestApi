@@ -122,7 +122,6 @@ public class SensorService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response insertSensor(
-            @Context UriInfo uriInfo,
             String SensorInput
     ) {
         Type type = new TypeToken<SensorRequest>() {
@@ -144,14 +143,11 @@ public class SensorService {
                 return Response.status(400).entity(response).build();
             }
 
-            sensor.setUrl(uriInfo.getBaseUri().toURL().toString());
             response.setResult("success");
             response.setSensor(sensor);
 
-        } catch (NumberFormatException | MalformedURLException nfe) {
+        } catch (NumberFormatException nfe) {
             response.setResult("invalid value");
-            nfe.printStackTrace();
-
             return Response.status(400).entity(response).build();
         }
 
