@@ -20,6 +20,7 @@ public class SensorService {
     private Database database = new Database();
 
     // TODO: Basic Auth
+    // TODO: add getByTypeBetween(time x, time y)
 
     @GET
     @Path("/{type}")
