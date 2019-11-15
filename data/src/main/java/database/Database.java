@@ -10,17 +10,18 @@ import java.util.Map;
 
 public class Database {
 
-    private static String host = "rdbms.strato.de";
-    private static String dbName = "DB3496989";
-    private static String user = "U3496989";
-    private static String pass = "Bijenkast112";
+    private static String host = "localhost";
+    private static int port = 4306;
+    private static String dbName = "beehive";
+    private static String user = "beehive";
+    private static String pass = "beehive";
 
     // TODO: One query to get sensordata from all sensors;
     // TODO: Prepared statements (?)
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
-                "jdbc:mysql://" + host + ":3306/"+dbName,
+                "jdbc:mysql://" + host + ":"+port+"/"+dbName,
                 user, pass);   // For MySQL only
     }
 
