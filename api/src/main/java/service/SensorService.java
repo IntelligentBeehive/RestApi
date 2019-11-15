@@ -128,8 +128,10 @@ public class SensorService {
         Type type = new TypeToken<SensorRequest>() {}.getType();
         SensorRequest request = gson.fromJson(SensorInput, type);
 
-        var value = request.getValue();
-        var sensor = new Sensor(SensorType.CO2, value);
+        var requestType = SensorType.valueOf(request.getType());
+        var requestValue = request.getValue();
+
+        var sensor = new Sensor(requestType, requestValue);
 
         if(database.insertSensor(sensor) == 0) {
             return Response.status(400).build();
