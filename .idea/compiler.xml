@@ -12,4 +12,7 @@
       </profile>
     </annotationProcessing>
   </component>
+  <component name="JavacSettings">
+    <option name="DEBUGGING_INFO" value="false" />
+  </component>
 </project>

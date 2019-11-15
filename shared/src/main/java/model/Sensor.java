@@ -1,7 +1,7 @@
 package model;
 
 public class Sensor {
-    private int id;
+    private Integer id;
     private SensorType type;
 
     private float value;
@@ -21,7 +21,7 @@ public class Sensor {
     }
 
     public void setUrl(String baseUrl){
-        this.url = baseUrl+"sensors/"+this.id;
+        this.url = baseUrl+"sensors/"+this.type+"/"+this.id;
     }
 
     public int getId() {

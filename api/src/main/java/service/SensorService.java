@@ -58,14 +58,14 @@ public class SensorService {
             @Context UriInfo uriInfo,
             @PathParam("type") String type
     ) {
-        var sensorType = SensorType.valueOf(type);
-        var sensorMap = database.getAllByType(sensorType);
-
         SensorResponseList response = new SensorResponseList();
         response.setOperation("getAllByType");
         response.setExpression("/"+type);
         try {
-            try {
+            var sensorType = SensorType.valueOf(type);
+            var sensorMap = database.getAllByType(sensorType);
+
+
                 var url = uriInfo.getBaseUri().toURL().toString();
 
                 for(Sensor p: sensorMap.values()) {
@@ -75,12 +75,12 @@ public class SensorService {
 
                 response.setResult("success");
 
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
 
-        } catch (NumberFormatException nfe) {
+        } catch (NumberFormatException | MalformedURLException nfe) {
             response.setResult("invalid value");
+            nfe.printStackTrace();
+
+            return Response.status(400).entity(response).build();
         }
 
         String output = gson.toJson(response);
@@ -93,7 +93,7 @@ public class SensorService {
     public Response getSensor(@PathParam("type") String type, @PathParam("id") String id) {
 
         SensorResponse response = new SensorResponse();
-        response.setOperation("GetSensor");
+        response.setOperation("getSensor");
         response.setExpression("/"+type+"/"+id);
 
         try {
@@ -120,7 +120,8 @@ public class SensorService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addNewSensor(
+    public Response insertSensor(
+            @Context UriInfo uriInfo,
             String SensorInput
     ) {
         System.out.println(SensorInput);
@@ -128,16 +129,32 @@ public class SensorService {
         Type type = new TypeToken<SensorRequest>() {}.getType();
         SensorRequest request = gson.fromJson(SensorInput, type);
 
-        var requestType = SensorType.valueOf(request.getType());
-        var requestValue = request.getValue();
+        SensorResponse response = new SensorResponse();
+        response.setOperation("insertSensor");
+        response.setExpression("POST");
 
-        var sensor = new Sensor(requestType, requestValue);
+        try {
+            var requestType = SensorType.valueOf(request.getType());
+            var requestValue = request.getValue();
+            var sensor = new Sensor(requestType, requestValue);
 
-        if(database.insertSensor(sensor) == 0) {
-            return Response.status(400).build();
+            if(database.insertSensor(sensor) == 0) {
+                response.setResult("invalid request");
+                return Response.status(400).entity(response).build();
+            }
+
+            sensor.setUrl(uriInfo.getBaseUri().toURL().toString());
+            response.setResult("success");
+            response.setSensor(sensor);
+
+        } catch (NumberFormatException | MalformedURLException nfe) {
+            response.setResult("invalid value");
+            nfe.printStackTrace();
+
+            return Response.status(400).entity(response).build();
         }
 
-        String output = gson.toJson(sensor);
+        String output = gson.toJson(response);
         return Response.status(200).entity(output).build();
     }
 }

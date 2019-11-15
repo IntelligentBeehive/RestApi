@@ -18,6 +18,7 @@ public class Database {
 
     // TODO: One query to get sensordata from all sensors;
     // TODO: Prepared statements (?)
+    // TODO: Set a (dynamic) limit on GET requests
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
@@ -68,7 +69,7 @@ public class Database {
                 Connection conn = this.getConnection();
                 Statement stmt = conn.createStatement();
         ) {
-            String select = "SELECT 'id', 'value', 'date_created' FROM "+type.getTypeString();
+            String select = "SELECT id, value, date_created FROM "+type.getTypeString();
             ResultSet result = stmt.executeQuery(select);
 
             System.out.println("The records selected are:");
@@ -103,7 +104,7 @@ public class Database {
                 Connection conn = this.getConnection();
                 Statement stmt = conn.createStatement();
         ) {
-            String select = "SELECT 'id', 'value', 'date_created' FROM "+type.getTypeString(); // join tables
+            String select = "SELECT id, value, date_created FROM "+type.getTypeString(); // join tables
             ResultSet result = stmt.executeQuery(select);
 
             System.out.println("The records selected are:");
