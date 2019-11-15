@@ -24,6 +24,7 @@ public class SensorService {
 
     @GET
     @Path("/{type}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getAllByType(
             @Context UriInfo uriInfo,
             @PathParam("type") String type
@@ -43,13 +44,16 @@ public class SensorService {
                 p.setUrl(url);
                 response.addToResponseList(p);
             }
+            if(response.getSensorList().size() < 1) {
+                throw new Exception("No results found");
+            }
 
             response.setResult("success");
 
 
-        } catch (NumberFormatException | MalformedURLException nfe) {
+        } catch (Exception e) {
             response.setResult("invalid value");
-            nfe.printStackTrace();
+            e.printStackTrace();
 
             return Response.status(400).entity(response).build();
         }
@@ -61,6 +65,7 @@ public class SensorService {
 
     @GET
     @Path("/{type}/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getSensor(@PathParam("type") String type, @PathParam("id") String id) {
 
         SensorResponse response = new SensorResponse();
