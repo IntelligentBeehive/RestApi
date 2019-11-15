@@ -26,41 +26,6 @@ public class Database {
                 user, pass);   // For MySQL only
     }
 
-    public Map<Integer, Sensor> getAllSensors() {
-
-        Map<Integer, Sensor> Sensors = new HashMap<>();
-
-        try (
-                Connection conn = this.getConnection();
-                Statement stmt = conn.createStatement();
-        ) {
-            String strSelect = "SELECT 'id', 'type', 'value', 'date_created' FROM "; // join tables 'table1' as TableName
-            ResultSet result = stmt.executeQuery(strSelect);
-
-            System.out.println("The records selected are:");
-            int rowCount = 0;
-            while (result.next()) {
-
-                Sensor p = new Sensor(
-                        result.getInt("id"),
-                        SensorType.valueOf("test"),
-                        result.getFloat("value")
-                );
-
-                Sensors.put(p.getId(), p);
-
-                System.out.println(p);
-                ++rowCount;
-            }
-            System.out.println("Total number of records = " + rowCount);
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return Sensors;
-    }
-
     public Map<Integer, Sensor> getAllByType(SensorType type) {
 
         Map<Integer, Sensor> Sensors = new HashMap<>();

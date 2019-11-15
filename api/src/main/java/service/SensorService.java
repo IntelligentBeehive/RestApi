@@ -18,39 +18,8 @@ public class SensorService {
 
     private Gson gson = new Gson();
     private Database database = new Database();
-    private static int id = 0;
 
     // TODO: Basic Auth
-
-/*    @GET
-    public Response getAll(@Context UriInfo uriInfo) {
-        var sensorMap = database.getAllSensors();
-
-        SensorResponseList response = new SensorResponseList();
-        response.setOperation("GetAllSensors");
-        response.setExpression("/");
-        try {
-            try {
-                var url = uriInfo.getBaseUri().toURL().toString();
-
-                for(Sensor p: sensorMap.values()) {
-                    p.setUrl(url);
-                    response.addToResponseList(p);
-                }
-
-                response.setResult("success");
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-        } catch (NumberFormatException nfe) {
-            response.setResult("invalid value");
-        }
-
-        String output = gson.toJson(response);
-        return Response.status(200).entity(output).build();
-    }*/
 
     @GET
     @Path("/{type}")
