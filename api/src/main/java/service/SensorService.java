@@ -60,20 +60,21 @@ public class SensorService {
     ) {
         SensorResponseList response = new SensorResponseList();
         response.setOperation("getAllByType");
-        response.setExpression("/"+type);
+        response.setExpression("/" + type);
         try {
+            type = type.toUpperCase();
             var sensorType = SensorType.valueOf(type);
             var sensorMap = database.getAllByType(sensorType);
 
 
-                var url = uriInfo.getBaseUri().toURL().toString();
+            var url = uriInfo.getBaseUri().toURL().toString();
 
-                for(Sensor p: sensorMap.values()) {
-                    p.setUrl(url);
-                    response.addToResponseList(p);
-                }
+            for (Sensor p : sensorMap.values()) {
+                p.setUrl(url);
+                response.addToResponseList(p);
+            }
 
-                response.setResult("success");
+            response.setResult("success");
 
 
         } catch (NumberFormatException | MalformedURLException nfe) {
@@ -94,17 +95,17 @@ public class SensorService {
 
         SensorResponse response = new SensorResponse();
         response.setOperation("getSensor");
-        response.setExpression("/"+type+"/"+id);
+        response.setExpression("/" + type + "/" + id);
 
         try {
+            type = type.toUpperCase();
             var sensorType = SensorType.valueOf(type);
             var sensorId = Integer.parseInt(id);
             var sensor = database.getSensorById(sensorType, sensorId);
 
-            if( sensor == null) {
+            if (sensor == null) {
                 response.setResult("Sensor not found");
-            }
-            else {
+            } else {
                 response.setResult("Sensor found");
                 response.setSensor(sensor);
             }
@@ -124,9 +125,8 @@ public class SensorService {
             @Context UriInfo uriInfo,
             String SensorInput
     ) {
-        System.out.println(SensorInput);
-
-        Type type = new TypeToken<SensorRequest>() {}.getType();
+        Type type = new TypeToken<SensorRequest>() {
+        }.getType();
         SensorRequest request = gson.fromJson(SensorInput, type);
 
         SensorResponse response = new SensorResponse();
@@ -134,11 +134,12 @@ public class SensorService {
         response.setExpression("POST");
 
         try {
-            var requestType = SensorType.valueOf(request.getType());
+            var stringRequestType = request.getType().toUpperCase();
+            var requestType = SensorType.valueOf(stringRequestType);
             var requestValue = request.getValue();
             var sensor = new Sensor(requestType, requestValue);
 
-            if(database.insertSensor(sensor) == 0) {
+            if (database.insertSensor(sensor) == 0) {
                 response.setResult("invalid request");
                 return Response.status(400).entity(response).build();
             }

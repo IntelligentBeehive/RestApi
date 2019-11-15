@@ -104,7 +104,8 @@ public class Database {
                 Connection conn = this.getConnection();
                 Statement stmt = conn.createStatement();
         ) {
-            String select = "SELECT id, value, date_created FROM "+type.getTypeString(); // join tables
+            String select = "SELECT id, value, date_created FROM "+type.getTypeString()
+                    +" WHERE id = "+id; // join tables
             ResultSet result = stmt.executeQuery(select);
 
             System.out.println("The records selected are:");

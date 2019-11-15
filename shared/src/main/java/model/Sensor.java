@@ -21,7 +21,7 @@ public class Sensor {
     }
 
     public void setUrl(String baseUrl){
-        this.url = baseUrl+"sensors/"+this.type+"/"+this.id;
+        this.url = baseUrl+"sensors/"+this.type.toString().toLowerCase()+"/"+this.id;
     }
 
     public int getId() {
