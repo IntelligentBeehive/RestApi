@@ -37,7 +37,6 @@ public class Database {
             String select = "SELECT id, value, date_created FROM "+type.getTypeString();
             ResultSet result = stmt.executeQuery(select);
 
-            System.out.println("The records selected are:");
             int rowCount = 0;
             while (result.next()) {
 
@@ -50,10 +49,8 @@ public class Database {
 
                 Sensors.put(p.getId(), p);
 
-                System.out.println(p);
                 ++rowCount;
             }
-            System.out.println("Total number of records = " + rowCount);
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -74,8 +71,6 @@ public class Database {
                     +" WHERE id = "+id; // join tables
             ResultSet result = stmt.executeQuery(select);
 
-            System.out.println("The records selected are:");
-
             while (result.next()) {
 
                 Sensor p = new Sensor(
@@ -84,8 +79,6 @@ public class Database {
                         result.getFloat("value"),
                         result.getString("date_created")
                 );
-
-                System.out.println(p);
 
                 Sensor = p;
             }
@@ -107,7 +100,6 @@ public class Database {
                 Statement stmt = conn.createStatement();
         ) {
             stmt.executeUpdate("INSERT INTO "+type+" (value) VALUES ('"+value+"')");
-            System.out.println("Affected rows: " + stmt.getUpdateCount());
 
             return stmt.getUpdateCount();
 
