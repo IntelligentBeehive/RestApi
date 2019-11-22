@@ -68,7 +68,7 @@ public class Database {
                 Statement stmt = conn.createStatement();
         ) {
             String select = "SELECT id, value, date_created FROM "+type.getTypeString()
-                    + " WHERE date_created BETWEEN "+timeFrom+" AND"+timeTo;
+                    + " WHERE date_created BETWEEN '"+timeFrom+"' AND '"+timeTo+"'";
             ResultSet result = stmt.executeQuery(select);
 
             while (result.next()) {
