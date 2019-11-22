@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
+import java.util.Map;
 
 @Path("/sensors")
 public class SensorService {
@@ -27,7 +28,9 @@ public class SensorService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllByType(
             @Context UriInfo uriInfo,
-            @PathParam("type") String type
+            @PathParam("type") String type,
+            @QueryParam("timeFrom") String timeFrom,
+            @QueryParam("timeTo") String timeTo
     ) {
         SensorResponseList response = new SensorResponseList();
         response.setOperation("getAllByType");
@@ -35,9 +38,9 @@ public class SensorService {
         try {
             type = type.toUpperCase();
             var sensorType = SensorType.valueOf(type);
-            var sensorMap = database.getAllByType(sensorType);
 
-
+            boolean between = !isNullOrEmpty(timeFrom) && !isNullOrEmpty(timeTo);
+            var sensorMap = between ? database.getAllByTypeBetween(sensorType, timeFrom, timeTo) : database.getAllByType(sensorType);
             var url = uriInfo.getBaseUri().toURL().toString();
 
             for (Sensor p : sensorMap.values()) {
@@ -128,5 +131,9 @@ public class SensorService {
 
         String output = gson.toJson(response);
         return Response.status(200).entity(output).build();
+    }
+
+    private static boolean isNullOrEmpty(String str) {
+        return str == null || str.trim().isEmpty();
     }
 }

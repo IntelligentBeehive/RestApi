@@ -59,6 +59,37 @@ public class Database {
         return Sensors;
     }
 
+    public Map<Integer, Sensor> getAllByTypeBetween(SensorType type, String timeFrom, String timeTo) {
+
+        Map<Integer, Sensor> Sensors = new HashMap<>();
+
+        try (
+                Connection conn = this.getConnection();
+                Statement stmt = conn.createStatement();
+        ) {
+            String select = "SELECT id, value, date_created FROM "+type.getTypeString()
+                    + " WHERE date_created BETWEEN "+timeFrom+" AND"+timeTo;
+            ResultSet result = stmt.executeQuery(select);
+
+            while (result.next()) {
+
+                Sensor p = new Sensor(
+                    result.getInt("id"),
+                    type,
+                    result.getFloat("value"),
+                    result.getString("date_created")
+                );
+
+                Sensors.put(p.getId(), p);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return Sensors;
+    }
+
     public Sensor getSensorById(SensorType type, int id) {
 
         Sensor Sensor = null;
