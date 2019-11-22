@@ -44,7 +44,8 @@ public class Database {
                 Sensor p = new Sensor(
                     result.getInt("id"),
                     type,
-                    result.getFloat("value")
+                    result.getFloat("value"),
+                    result.getString("date_created")
                 );
 
                 Sensors.put(p.getId(), p);
@@ -80,7 +81,8 @@ public class Database {
                 Sensor p = new Sensor(
                         result.getInt("id"),
                         type,
-                        result.getFloat("value")
+                        result.getFloat("value"),
+                        result.getString("date_created")
                 );
 
                 System.out.println(p);

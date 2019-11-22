@@ -1,10 +1,12 @@
 package model;
 
+import java.security.Timestamp;
+
 public class Sensor {
     private Integer id;
     private SensorType type;
-
     private float value;
+    private String dateCreated;
     private String url;
 
     public Sensor() { } // Default to allow JSON Type convert
@@ -14,10 +16,11 @@ public class Sensor {
         this.value = value;
     }
 
-    public Sensor(int id, SensorType type, float value) {
+    public Sensor(int id, SensorType type, float value, String dateCreated) {
         this.id = id;
         this.type = type;
         this.value = value;
+        this.dateCreated = dateCreated;
     }
 
     public void setUrl(String baseUrl){
@@ -43,5 +46,9 @@ public class Sensor {
     @Override
     public String toString() {
         return String.format("Type: %s, Value: %s Url: %s", type, value, url);
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
     }
 }
