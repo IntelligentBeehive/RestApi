@@ -4,7 +4,7 @@ package model;
  * Inheritance model for every models
  * @Author Hugo Mkandawire
  */
-public class Model {
+public abstract class Model {
     protected Integer id;
     protected String dateCreated;
     protected String url;
