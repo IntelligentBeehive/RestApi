@@ -50,6 +50,18 @@ public class Pollen extends Model {
         this.url = baseUrl + "pollen/" + this.id;
     }
 
+    public String getPlantName() {
+        return plantName;
+    }
+
+    public String getHex() {
+        return hex;
+    }
+
+    public String getRgb() {
+        return rgb;
+    }
+
     /**
      * Return model string
      * @return pollen string
