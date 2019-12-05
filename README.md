@@ -1,4 +1,4 @@
 # Documentation
-> Click the Swagger link below to find documentation about every http method available on this API
+> Every endpoint is described in the Swagger page below with examples available. This page will be updated when a new endpoint is available
 
 https://app.swaggerhub.com/apis-docs/dtrilsbeek/IntelligentBeehiveApi/0.1
