@@ -2,7 +2,7 @@ package service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import database.Database;
+import database.SensorRepository;
 import model.*;
 
 import javax.ws.rs.*;
@@ -11,14 +11,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.util.Map;
 
 @Path("/sensors")
 public class SensorService {
 
     private Gson gson = new Gson();
-    private Database database = new Database();
+    private SensorRepository repo = new SensorRepository();
 
     // TODO: Basic Auth
     // TODO: add getByTypeBetween(time x, time y)
@@ -40,7 +38,7 @@ public class SensorService {
             var sensorType = SensorType.valueOf(type);
 
             boolean between = !isNullOrEmpty(timeFrom) && !isNullOrEmpty(timeTo);
-            var sensorMap = between ? database.getAllByTypeBetween(sensorType, timeFrom, timeTo) : database.getAllByType(sensorType);
+            var sensorMap = between ? repo.getAllByTypeBetween(sensorType, timeFrom, timeTo) : repo.getAllByType(sensorType);
             var url = uriInfo.getBaseUri().toURL().toString();
 
             for (Sensor p : sensorMap.values()) {
@@ -79,7 +77,7 @@ public class SensorService {
             type = type.toUpperCase();
             var sensorType = SensorType.valueOf(type);
             var sensorId = Integer.parseInt(id);
-            var sensor = database.getSensorById(sensorType, sensorId);
+            var sensor = repo.getSensorById(sensorType, sensorId);
 
             if (sensor == null) {
                 response.setResult("Sensor not found");
@@ -116,7 +114,7 @@ public class SensorService {
             var requestValue = request.getValue();
             var sensor = new Sensor(requestType, requestValue);
 
-            if (database.insertSensor(sensor) == 0) {
+            if (repo.insertSensor(sensor) == 0) {
                 response.setResult("invalid request");
                 return Response.status(400).entity(response).build();
             }
