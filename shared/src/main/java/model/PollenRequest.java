@@ -2,6 +2,7 @@ package model;
 
 /**
  * Pollen request
+ *
  * @Author Hugo Mkandawire
  */
 public class PollenRequest {

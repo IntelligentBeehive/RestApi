@@ -36,13 +36,11 @@ public class PollenService {
 
             if (pollen == null) {
                 response.setResult("pollen not found");
-            }
-            else {
+            } else {
                 response.setResult("pollen found");
                 response.setPollen(pollen);
             }
-        }
-        catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             response.setResult("invalid value");
             ex.printStackTrace();
         }
@@ -57,7 +55,7 @@ public class PollenService {
             @Context UriInfo uriInfo,
             @QueryParam("dateFrom") String dateFrom,
             @QueryParam("dateTo") String dateTo) {
-        PollenResponseList response= new PollenResponseList();
+        PollenResponseList response = new PollenResponseList();
         response.setOperation("getAllBetween");
         try {
             var pollenMap = StringUtil.isBlank(dateFrom) || StringUtil.isBlank(dateTo)
@@ -71,8 +69,7 @@ public class PollenService {
             }
 
             response.setResult("success");
-        }
-        catch (IllegalArgumentException | MalformedURLException ex) {
+        } catch (IllegalArgumentException | MalformedURLException ex) {
             response.setResult("invalid value");
             ex.printStackTrace();
             return Response.status(Response.Status.BAD_REQUEST).build();
