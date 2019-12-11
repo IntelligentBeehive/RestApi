@@ -6,6 +6,7 @@ module api {
     requires javax.servlet.api;
     requires org.eclipse.jetty.servlet;
     requires org.eclipse.jetty.server;
+    requires org.eclipse.jetty.util;
     requires shared;
     requires data;
 
