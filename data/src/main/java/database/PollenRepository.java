@@ -50,7 +50,7 @@ public class PollenRepository extends Database {
         Pollen pollen = null;
         try (Connection conn = this.getConnection();
              Statement stmt = conn.createStatement()) {
-            String select = String.format("SELECT * FROM %s WHERE id = %i;", entity, id);
+            String select = String.format("SELECT * FROM %s WHERE id = %d;", entity, id);
             ResultSet result = stmt.executeQuery(select);
             while (result.next()) {
                 Pollen p = new Pollen(
