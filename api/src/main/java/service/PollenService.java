@@ -5,6 +5,7 @@ import database.PollenRepository;
 import model.Pollen;
 import model.PollenResponse;
 import model.PollenResponseList;
+import model.TimeLength;
 import org.eclipse.jetty.util.StringUtil;
 
 import javax.ws.rs.*;
@@ -13,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.MalformedURLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 
 /**
  * @author Hugo Mkandawire
@@ -76,6 +79,52 @@ public class PollenService {
         }
 
         String output = gson.toJson(response);
+        return Response.status(Response.Status.OK).entity(output).header("Access-Control-Allow-Origin", "*").build();
+    }
+
+    @GET
+    @Path("/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAmountDuring(@QueryParam("time") String time) {
+        int amount = 0;
+        try {
+            LocalDate today = LocalDate.now(), firstDay = LocalDate.now();
+            var timeLength = StringUtil.isNotBlank(time) ? TimeLength.valueOf(time.toUpperCase()) : TimeLength.UNKNOWN;
+            switch (timeLength) {
+                case DAY: // today from midnight to the end of evening
+                    break;
+                case WEEK: // current week from sunday to today
+                    firstDay = today;
+                    while (firstDay.getDayOfWeek() != DayOfWeek.SUNDAY) {
+                        firstDay = firstDay.minusDays(1);
+                    }
+                    break;
+                case MONTH: // current month from first day to today
+                    firstDay = LocalDate.of(today.getYear(), today.getMonth(), 1);
+                    break;
+                case QUARTER: // current last 3 month from the first day to today
+                    firstDay = today.minusMonths(3);
+                    firstDay = LocalDate.of(firstDay.getYear(), firstDay.getMonth(), 1);
+                    break;
+                case YEAR: // current year from first day to today
+                    firstDay = LocalDate.of(today.getYear(), 1, 1);
+                    break;
+                case TWO_YEARS: // from the first day of last year to today
+                    firstDay = LocalDate.of(today.getYear() - 1, 1, 1);
+                    break;
+                case FIVE_YEARS: // from the first day of 5 years ago to today
+                    firstDay = LocalDate.of(today.getYear() - 5, 1, 1);
+                    break;
+                default:
+                    firstDay = LocalDate.MIN;
+            }
+            amount = repo.getAmountBetween(firstDay, today.plusDays(1));
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        String output = gson.toJson(amount);
         return Response.status(Response.Status.OK).entity(output).header("Access-Control-Allow-Origin", "*").build();
     }
 }
