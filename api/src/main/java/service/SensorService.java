@@ -45,6 +45,7 @@ public class SensorService {
                 p.setUrl(url);
                 response.addToResponseList(p);
             }
+            // TODO: handle exception on empty list
             if(response.getSensorList().size() < 1) {
                 throw new Exception("No results found");
             }
