@@ -61,7 +61,7 @@ public class SensorService {
         }
 
         String output = gson.toJson(response);
-        return Response.status(200).entity(output).build();
+        return Response.status(200).entity(output).header("Access-Control-Allow-Origin", "*").build();
     }
 
 
@@ -92,7 +92,7 @@ public class SensorService {
         }
 
         String output = gson.toJson(response);
-        return Response.status(200).entity(output).build();
+        return Response.status(200).entity(output).header("Access-Control-Allow-Origin", "*").build();
     }
 
     @POST
@@ -129,7 +129,7 @@ public class SensorService {
         }
 
         String output = gson.toJson(response);
-        return Response.status(200).entity(output).build();
+        return Response.status(200).header("Access-Control-Allow-Origin", "*").entity(output).build();
     }
 
     private static boolean isNullOrEmpty(String str) {
