@@ -46,7 +46,7 @@ public class PollenService {
         }
 
         String output = gson.toJson(response);
-        return Response.status(200).entity(output).build();
+        return Response.status(200).entity(output).header("Access-Control-Allow-Origin", "*").build();
     }
 
     @GET
@@ -76,6 +76,6 @@ public class PollenService {
         }
 
         String output = gson.toJson(response);
-        return Response.status(Response.Status.OK).entity(output).build();
+        return Response.status(Response.Status.OK).entity(output).header("Access-Control-Allow-Origin", "*").build();
     }
 }
