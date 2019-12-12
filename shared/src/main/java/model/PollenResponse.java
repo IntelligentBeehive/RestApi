@@ -2,6 +2,7 @@ package model;
 
 /**
  * Pollen response
+ *
  * @author: Hugo Mkandawire
  */
 public class PollenResponse extends Response {

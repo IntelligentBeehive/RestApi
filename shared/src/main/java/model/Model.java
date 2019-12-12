@@ -2,6 +2,7 @@ package model;
 
 /**
  * Inheritance model for every models
+ *
  * @Author Hugo Mkandawire
  */
 public abstract class Model {

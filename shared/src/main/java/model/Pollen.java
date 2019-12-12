@@ -2,6 +2,7 @@ package model;
 
 /**
  * Model class Pollen
+ *
  * @author Hugo Mkandawire
  */
 public class Pollen extends Model {
@@ -12,13 +13,15 @@ public class Pollen extends Model {
     /**
      * Default constructor for allowing JSON Type convert
      */
-    public Pollen() {}
+    public Pollen() {
+    }
 
     /**
      * Constructor with minimal parameters
+     *
      * @param plantName plant name
-     * @param hex hex color code
-     * @param rgb red-green-blue color code
+     * @param hex       hex color code
+     * @param rgb       red-green-blue color code
      */
     public Pollen(String plantName, String hex, String rgb) {
         this.plantName = plantName;
@@ -28,10 +31,11 @@ public class Pollen extends Model {
 
     /**
      * Constructor with maximal parameters
-     * @param id identifier
-     * @param plantName plant name
-     * @param hex hex color code
-     * @param rgb red-green-blue color code
+     *
+     * @param id          identifier
+     * @param plantName   plant name
+     * @param hex         hex color code
+     * @param rgb         red-green-blue color code
      * @param dateCreated date of created
      */
     public Pollen(int id, String plantName, String hex, String rgb, String dateCreated) {
@@ -44,9 +48,10 @@ public class Pollen extends Model {
 
     /**
      * Set url
+     *
      * @param baseUrl base url
      */
-    public void setUrl(String baseUrl){
+    public void setUrl(String baseUrl) {
         this.url = baseUrl + "pollen/" + this.id;
     }
 
@@ -64,6 +69,7 @@ public class Pollen extends Model {
 
     /**
      * Return model string
+     *
      * @return pollen string
      */
     @Override

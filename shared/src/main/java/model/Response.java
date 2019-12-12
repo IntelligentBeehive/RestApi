@@ -2,6 +2,7 @@ package model;
 
 /**
  * Inheritance response for every responses
+ *
  * @Author Hugo Mkandawire
  */
 public abstract class Response {
@@ -25,11 +26,11 @@ public abstract class Response {
         this.expression = expression;
     }
 
-    public void setResult(String result) {
-        this.result = result;
-    }
-
     public String getResult() {
         return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

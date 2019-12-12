@@ -1,11 +1,11 @@
 package service;
 
 import com.google.gson.Gson;
-import database.Database;
 import database.PollenRepository;
 import model.Pollen;
 import model.PollenResponse;
 import model.PollenResponseList;
+import org.eclipse.jetty.util.StringUtil;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -36,13 +36,11 @@ public class PollenService {
 
             if (pollen == null) {
                 response.setResult("pollen not found");
-            }
-            else {
+            } else {
                 response.setResult("pollen found");
                 response.setPollen(pollen);
             }
-        }
-        catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             response.setResult("invalid value");
             ex.printStackTrace();
         }
@@ -52,17 +50,17 @@ public class PollenService {
     }
 
     @GET
-    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllBetween(
             @Context UriInfo uriInfo,
             @QueryParam("dateFrom") String dateFrom,
             @QueryParam("dateTo") String dateTo) {
-        PollenResponseList response= new PollenResponseList();
+        PollenResponseList response = new PollenResponseList();
         response.setOperation("getAllBetween");
-        response.setExpression("");
         try {
-            var pollenMap = repo.getAllBetween(dateFrom, dateTo);
+            var pollenMap = StringUtil.isBlank(dateFrom) || StringUtil.isBlank(dateTo)
+                    ? repo.getAll()
+                    : repo.getAllBetween(dateFrom, dateTo);
             var url = uriInfo.getBaseUri().toURL().toString();
 
             for (Pollen p : pollenMap.values()) {
@@ -70,13 +68,8 @@ public class PollenService {
                 response.addPollen(p);
             }
 
-            if(response.getPollenList().size() < 1) {
-                response.setResult("no results found");
-                return Response.status(Response.Status.NO_CONTENT).build();
-            }
             response.setResult("success");
-        }
-        catch (IllegalArgumentException | MalformedURLException ex) {
+        } catch (IllegalArgumentException | MalformedURLException ex) {
             response.setResult("invalid value");
             ex.printStackTrace();
             return Response.status(Response.Status.BAD_REQUEST).build();
