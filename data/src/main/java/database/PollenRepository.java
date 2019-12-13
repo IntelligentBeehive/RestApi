@@ -24,16 +24,14 @@ public class PollenRepository extends Database {
      * @return update count
      */
     public int insertPollen(Pollen pollen) {
-        String values = "'"
-                + pollen.getPlantName() + "', '"
+        String values = pollen.getPlantName() + "', '"
                 + pollen.getHex() + "', '"
                 + pollen.getRgb() + "', '"
-                + pollen.getDateCreated() + "'";
+                + pollen.getDateCreated();
 
-        try (Connection conn = this.getConnection();
-             Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate(
-                    String.format("INSERT INTO %s(%s) VALUES ('%s')", entity, headers, values));
+        try (Connection conn = this.getConnection(); Statement stmt = conn.createStatement()) {
+            String s = String.format("INSERT INTO %s(%s) VALUES ('%s')", entity, headers, values);
+            stmt.executeUpdate(s);
             return stmt.getUpdateCount();
         } catch (SQLException ex) {
             ex.printStackTrace();
