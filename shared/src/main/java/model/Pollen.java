@@ -34,6 +34,20 @@ public class Pollen extends Model {
     }
 
     /**
+     * Constructor with minimal parameters
+     *
+     * @param plantName plant name
+     * @param hex       hex color code
+     * @param rgb       red-green-blue color code
+     */
+    public Pollen(String plantName, String hex, String rgb, String dateCreated) {
+        this.plantName = plantName;
+        this.hex = hex;
+        this.rgb = rgb;
+        this.dateCreated = dateCreated;
+    }
+
+    /**
      * Constructor with maximal parameters
      *
      * @param id          identifier
