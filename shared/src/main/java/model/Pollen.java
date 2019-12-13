@@ -1,5 +1,8 @@
 package model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * Model class Pollen
  *
@@ -27,6 +30,7 @@ public class Pollen extends Model {
         this.plantName = plantName;
         this.hex = hex;
         this.rgb = rgb;
+        this.dateCreated = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     /**
