@@ -1,11 +1,9 @@
 package service;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import database.PollenRepository;
-import model.Pollen;
-import model.PollenResponse;
-import model.PollenResponseList;
-import model.TimeLength;
+import model.*;
 import org.eclipse.jetty.util.StringUtil;
 
 import javax.ws.rs.*;
@@ -13,11 +11,14 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 /**
+ * Pollen representational state transfer service
+ *
  * @author Hugo Mkandawire
  */
 @Path("/pollen")
@@ -126,5 +127,32 @@ public class PollenService {
 
         String output = gson.toJson(amount);
         return Response.status(Response.Status.OK).entity(output).header("Access-Control-Allow-Origin", "*").build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response insertPollen(String post) {
+        Type type = new TypeToken<PollenRequest>() {
+        }.getType();
+        PollenRequest request = gson.fromJson(post, type);
+        PollenResponse response = new PollenResponse();
+        response.setOperation("insertPollen");
+        response.setExpression("POST");
+        try {
+            var pollen = new Pollen(request.getPlantName(), request.getHex(), request.getRgb());
+            if (repo.insertPollen(pollen) == 0) {
+                response.setResult("invalid request");
+                return Response.status(400).entity(response).build();
+            }
+            response.setResult("success");
+            response.setPollen(pollen);
+
+        } catch (NumberFormatException nfe) {
+            response.setResult("invalid value");
+            return Response.status(400).entity(response).build();
+        }
+        String output = gson.toJson(response);
+        return Response.status(200).header("Access-Control-Allow-Origin", "*").entity(output).build();
     }
 }
