@@ -140,7 +140,9 @@ public class PollenService {
         response.setOperation("insertPollen");
         response.setExpression("POST");
         try {
-            var pollen = new Pollen(request.getPlantName(), request.getHex(), request.getRgb());
+            var pollen = StringUtil.isBlank(request.getDateCreated())
+                    ? new Pollen(request.getPlantName(), request.getHex(), request.getRgb())
+                    : new Pollen(request.getPlantName(), request.getHex(), request.getRgb(), request.getDateCreated());
             if (repo.insertPollen(pollen) == 0) {
                 response.setResult("invalid request");
                 return Response.status(400).entity(response).build();
