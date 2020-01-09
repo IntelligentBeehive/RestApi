@@ -9,11 +9,20 @@ public class PollenRequest {
     private String plantName;
     private String hex;
     private String rgb;
+    private String dateCreated;
 
     public PollenRequest(String plantName, String hex, String rgb) {
         this.plantName = plantName;
         this.hex = hex;
         this.rgb = rgb;
+        this.dateCreated = "";
+    }
+
+    public PollenRequest(String plantName, String hex, String rgb, String dateCreated) {
+        this.plantName = plantName;
+        this.hex = hex;
+        this.rgb = rgb;
+        this.dateCreated = dateCreated;
     }
 
     public String getPlantName() {
@@ -26,5 +35,9 @@ public class PollenRequest {
 
     public String getRgb() {
         return rgb;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
     }
 }

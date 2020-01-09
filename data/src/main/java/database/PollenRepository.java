@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,16 +24,14 @@ public class PollenRepository extends Database {
      * @return update count
      */
     public int insertPollen(Pollen pollen) {
-        String values = "'"
-                + pollen.getPlantName() + "', '"
+        String values = pollen.getPlantName() + "', '"
                 + pollen.getHex() + "', '"
                 + pollen.getRgb() + "', '"
-                + pollen.getDateCreated() + "'";
+                + pollen.getDateCreated();
 
-        try (Connection conn = this.getConnection();
-             Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate(
-                    String.format("INSERT INTO %s(%s) VALUES ('%s')", entity, headers, values));
+        try (Connection conn = this.getConnection(); Statement stmt = conn.createStatement()) {
+            String s = String.format("INSERT INTO %s(%s) VALUES ('%s')", entity, headers, values);
+            stmt.executeUpdate(s);
             return stmt.getUpdateCount();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -123,5 +122,26 @@ public class PollenRepository extends Database {
             e.printStackTrace();
         }
         return pollen;
+    }
+
+    /**
+     * Get amount of pollen during time length
+     *
+     * @return amount of pollen
+     */
+    public int getAmountBetween(LocalDate dateFrom, LocalDate dateTo) {
+        int amount = 0;
+        try (Connection conn = this.getConnection();
+             Statement stmt = conn.createStatement()) {
+            String select = String.format("SELECT COUNT(*) AS amount FROM %s WHERE date_created BETWEEN '%s' AND '%s'", entity, dateFrom.toString(), dateTo.toString());
+            ResultSet result = stmt.executeQuery(select);
+
+            while (result.next()) {
+                amount = result.getInt("amount");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return amount;
     }
 }
