@@ -1,17 +1,15 @@
 package service;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import database.HealthRepository;
-import database.SensorRepository;
-import model.*;
+import model.BeeInfo;
+import model.BeeInfoResponse;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.lang.reflect.Type;
 
 @Path("/health")
 public class HealthService {
@@ -34,12 +32,12 @@ public class HealthService {
             response.setBeeInfo(beeHealthInfo);
 
             response.setResult("success");
-            return Response.ok().entity(gson.toJson(response)).build();
+            return Response.ok().entity(gson.toJson(response)).header("Access-Control-Allow-Origin", "*").build();
         } catch (Exception e) {
             response.setResult("invalid value");
             e.printStackTrace();
 
-            return Response.status(400).entity(response).build();
+            return Response.status(400).entity(response).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 
