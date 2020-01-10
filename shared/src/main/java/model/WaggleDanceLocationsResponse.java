@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 
-public class WaggleDanceLocationsResponse extends Response {
+public class WaggleDanceLocationsResponse {
 
     private final List<WaggleDanceResult> waggleDanceResults;
 

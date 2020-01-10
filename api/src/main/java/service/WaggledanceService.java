@@ -1,9 +1,10 @@
 package service;
 
-import model.Response;
 import model.WaggleDanceCountResponse;
 import model.WaggleDanceLocationsResponse;
 import model.WaggleDanceResult;
+
+import javax.ws.rs.core.Response;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -30,7 +31,7 @@ public class WaggledanceService {
         waggleDances.add(new WaggleDanceResult(51.4308986f, 5.4509588f, "Zonnebloem",day, 90));
         var result = new WaggleDanceLocationsResponse(waggleDances);
 
-        return result;
+        return Response.ok(result).build();
     }
     @GET
     @Path("/count")
@@ -45,6 +46,6 @@ public class WaggledanceService {
             var untilDate = LocalDateTime.parse(dateUntil);
         }
 
-        return new WaggleDanceCountResponse(5);
+        return Response.ok(new WaggleDanceCountResponse(5)).build();
     }
 }

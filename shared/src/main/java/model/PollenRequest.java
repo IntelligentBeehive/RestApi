@@ -18,6 +18,8 @@ public class PollenRequest {
         this.dateCreated = "";
     }
 
+    public PollenRequest(){}
+
     public PollenRequest(String plantName, String hex, String rgb, String dateCreated) {
         this.plantName = plantName;
         this.hex = hex;

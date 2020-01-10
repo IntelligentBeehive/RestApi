@@ -1,6 +1,6 @@
 package model;
 
-public class WaggleDanceCountResponse extends Response{
+public class WaggleDanceCountResponse {
     private final int count;
 
     public WaggleDanceCountResponse(int count) {

@@ -17,10 +17,11 @@ public class Service {
 
         // Tells the Jersey Servlet which REST service/class to load.
         jerseyServlet.setInitParameter("jersey.config.server.provider.classnames",
-                String.format("%s;%s;%s",
+                String.format("%s;%s;%s;%s",
                         PollenService.class.getCanonicalName(),
                         WaggledanceService.class.getCanonicalName(),
-                        SensorService.class.getCanonicalName()));
+                        SensorService.class.getCanonicalName(),
+                        HealthService.class.getCanonicalName()));
 
         try {
             jettyServer.start();
